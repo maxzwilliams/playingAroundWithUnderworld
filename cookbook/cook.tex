@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage{float}
+\usepackage{amssymb}
+\newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
+
+\usepackage[a4paper, total={7in, 10.5in}]{geometry}
+\usepackage{hyperref}
+
+
+\title{Cook book for getting started with underworld3}
+\author{Maximilian Williams }
+
+\begin{document}
+
+\maketitle
+
+\section*{Installing underworld 3 from scratch}
+1. Install the current version of python 3 from \url{https://www.python.org}
+\newline
+2. Download anaconda from \url{https://www.anaconda.com/download}
+\newline
+3.Open terminal and navigate to a directory where you want to store the files for underworld 3 (e.g Documents \footnote{This can be done by opening terminal and running 'cd Documents'}). Then run 'git clone https://github.com/underworldcode/underworld3.git'. This will create a directory called "underworld3" in your chosen location.
+\newline
+4. Download build\_uw.yml (get from Juan) and save it in the underworld3 directory
+\newline
+5. In terminal navigate to the directory build\_uw.yml is located in
+\newline
+6. run 'conda env create -f build\_uw.yml'
+\newline
+7. then run 'conda activate uw3'
+\newline
+8. If successful, (uw3) should appear on the left side of your terminal or command line
+\newline
+9. Using terminal, navigate to the directory underworld3
+\newline
+10. Run './clean.sh'
+\newline
+11. run 'python setup.py develop'
+\newline
+12. Finally, run 'pytest -v'.
+\newline
+If all tests pass, you have successfully installed underworld3
+
+\section*{Understanding The codes}
+
+
+
+
+
+
+
+
+\end{document}

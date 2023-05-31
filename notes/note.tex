@@ -1,0 +1,188 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage{float}
+\usepackage{amssymb}
+\newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
+
+\usepackage[a4paper, total={7in, 10.5in}]{geometry}
+
+\title{RA notes}
+\author{Maximilian Williams}
+
+\date{February 2021}
+
+\begin{document}
+
+\maketitle
+
+\section{Notes on FEM}
+
+\subsection{Chapter 1:}
+Definition FEM: Finite Element Methods
+\newline
+Definition Strain: The strain is the fractional displacement of a body, so if I have a rod of length $L_0$ and we apply a force to make it a length $L_0 + \Delta L$, then the strain ($\epsilon$) is $\epsilon = \frac{\Delta L}{L_0}$. 
+\newline
+Definition Stress: The stress ($\sigma$) is the (vector) force applied per unit area to a body $\sigma = \frac{F}{A}$.
+\newline
+Notation: When defining the properties of a vector $q$ on an element $e$ with nodes labelled $i = 1, 2, ..., n$ we say $\vec{q^{e}_{i} }$ is the vector force acting on the element e on node $i$. 
+\newline
+Definition Displacement function: Suppose we have an element, say a triangle with nodes labelled 1,2 and 3.
+\newline
+Finite element methods (FEM) rely on discritizing a volume into many subvolumes called "elements''. These elements have boundries and nodes where they meet other elements. By combining all these elements we approximate the volume. In each element, we use the system of equations provided to produce a constrain within the element - this is done for each element. By combining all these constraints we can solve for the properties of the entire system. 
+\newline
+We label each of the elements in the system using a letter, for example we might talk about an element $e$. This element has verticies $i=1,2,3...$ which connect to other element. Lets consider an triangular element with verticies $i=1,2,3$. On each of these nodes, we have a vector force with components $j=1,2,3$. We can write out all the forces on our element e as
+
+\begin{equation}
+	\vec{q}^{e} = \begin{pmatrix}
+		\vec{q}^{e}_{1} \\
+		\vec{q}^{e}_{2} \\
+		\vec{q}^{e}_{3}
+	\end{pmatrix}
+\end{equation}
+where $q^{e}_{i}$ is the force on the node labelled $i$. Then the force on each node is written as a vector:
+\begin{equation}
+	\vec{q}^{e}_{i} = \begin{pmatrix}
+		U_i \\ 
+		V_i 
+	\end{pmatrix}
+\end{equation}
+where $U$ and $V$ are forces in each of the different components. Here, we have simplified the situation to a 2D situation, usually there would be a third component.
+\newline
+Similary, at each node we have a displacement 
+\begin{equation}
+	\vec{u}^{e} = \begin{pmatrix}
+		\vec{u}^{e}_{1} \\ 
+		\vec{u}^{e}_{2} \\
+		\vec{u}^{e}_{3} 
+	\end{pmatrix}
+\end{equation}
+with:
+\begin{equation}
+	\vec{u}^{e}_{i} = \begin{pmatrix}
+		u_i \\ 
+		v_i
+	\end{pmatrix}
+\end{equation}
+\newline
+Now lets consider the mechanics of this element and write an equation that governs its motion. For an elastic material with some external forces $\vec{f}$ we can relate the forces to the displacement by:
+\begin{equation}
+	\vec{q}^{e} = \vec{K}^{e} \vec{u}^{e} + \vec{f}^{e}.
+\end{equation}
+Here, $K$ is a stiffness matrix which contains all the information about elasticity within the material.
+\newline
+Now, we know how each element $e$ is governed. So now we focus on putting it all together to give a system that we can solve.
+\newline
+For a mechanical element, there are two conditions - 1. displacement compatabiolity and 2. equilibrium. The first condition mandates that the displacements of common nodes that between elements are the same. That is, shared nodes have the same location. The second definition mandates that the system is in equivlibniu\m, that is, all the forces sum to zero.
+\newline
+\begin{equation}
+	\sum_{e=1}^{n} \vec{q}^{e}_{a} = 0
+\end{equation}
+for each $a$. 
+\newline
+
+\subsection{Chapter 2:}
+We now have a framework for writing and dealing with general discrete systems. However, before we focused on discrete systems made of building blocks. Now lets focus on continous systems such as an elastic body and apply the FEM to this. 
+\newline
+Lets take a continous elastic medium and discritize it using a bunch of triangles with common nodes and edges. Using our previous method, we can write equations that give us the displacement at any node on the medium. However, in practice, for each element, we want to know how the displacement varies across it - not just at the nodes. Let the displacements $\tilde{\vec{u}}$ at a particular point within an element $e$ be approximated by a column vector $\hat{\vec{u}}$. We use shape functions $N_{a}$ to give:
+\begin{equation}
+	\vec{u} \approx \hat{\vec{u}} = \sum_{a} N_a 
+	\vec{\tilde{u}}_a^{e} = N \vec{\tilde{u}}^{e}
+\end{equation}
+So, we use these shape functions $N_{i}$ on each vertex to give a continuous map between position and displacement within a particular element.
+\newline
+We now know the displacements within the material. The strains will always be related by:
+\begin{equation}
+	\epsilon = S u
+\end{equation}
+where $S$ is a linear differential operator. We can define an interpolated strain using N again as:
+\begin{equation}
+	\epsilon \approx \hat{\epsilon}= S N \hat{u}^{e}.
+\end{equation}
+Stresses are the force per unit area on a surface. There might be some background stress $\sigma_0$. If the relationship between stress and strain is linear then:
+\begin{equation}
+	\sigma = D (\epsilon - \epsilon_0) + \sigma_0
+\end{equation}
+\newline
+\subsection{Method for solving: virtual displacements}
+The idea here is to consider small virtual displacements in the lattice and equate the external work with the total intnernal work, to get a system of integral equations which we can solve.
+\newline
+Lets imagine we make a small change in displacement of each of the nodes $\delta \tilde{u}^{e}$. The resulting displacements are:
+\begin{equation}
+	\delta u = N \delta \tilde{u}^{e}
+\end{equation}
+ and,
+\begin{equation}
+	\delta \epsilon = B \delta \tilde{u}^{e}
+\end{equation}
+where $B = S N$ from our definition of strain.
+\newline
+The total external work done on the nodes of an element is:
+\begin{equation}
+	\sum_{a} \delta \tilde{u}^{e}^{T}_a q^{e}_{a} = \delta \tilde{u}^{e}^{T} q^{e}
+\end{equation} 
+and the work per unit volume due to stresses and body forces is:
+\begin{equation}
+	\delta \epsilon^{T} \sigma - \delta u^{T} b
+\end{equation}
+or for a specific element whose properites determine B:
+\begin{equation}
+	\delta u^{e}^{T} (B^T \sigma - N^{T} b)
+\end{equation}
+Equating total external work to total internal work we get:
+
+\begin{equation}
+	\delta \tilde{u}^{e}^{T} q^{e} =  \int_{\Omega} \delta u^{e}^{T} (B^T \sigma - N^{T} b) d\Omega
+\end{equation}
+which is true for all deviations in displacement giving:
+\begin{equation}
+	q^{e} =  \int_{\Omega}(B^T \sigma - N^{T} b) d\Omega
+\end{equation}
+By solving the equation $\sum_{e} q^{e} = 0$, we obtain a solution for the parameters $u$ which defines our whole problem.
+
+\newline
+We can also abandon this notion of forces within each individual element and reformulate this approach in terms of the entire structure. 
+\newline 
+There is another way this whole solving process can be approached from and that is to minimise the energy of the system. But its the same idea, you write out the potentail energy and work for the system to define $\Pi = W + U$ and then find the displacements $u$ that minimise this as best you can.
+\newline
+To minimise there are many different methods. One of them is the rayleigh-ritz method. dont quite understand it yet.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

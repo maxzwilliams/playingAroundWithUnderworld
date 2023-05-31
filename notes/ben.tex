@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+\usepackage{float}
+\usepackage{amssymb}
+\newcommand*\Laplace{\mathop{}\!\mathbin\bigtriangleup}
+
+\usepackage[a4paper, total={7in, 10.5in}]{geometry}
+
+\title{Questions}
+\author{}
+
+\date{February 2021}
+
+\begin{document}
+
+\maketitle
+
+We have three equations that we want to solve.
+$$ u = - \frac{k}{\mu_c}\nabla p,$$
+$$ \mu_c = \left( \frac{c}{mu_o^{\frac{1}{4}}} +  \frac{1-c}{mu_s^{\frac{1}{4}}} \right)^{-4} $$
+and,
+$$ \varphi \frac{\delta c}{\delta t} + \nabla(uc) = \nabla(\kappa\nabla c)  $$
+
+I am trying to understand how these equations are encoded in uw3.
+\newline
+I believe I understand how the Darcy velocity equation is encoded and solved. You define a Darcy model that takes velocity u and pressure p. You give this model a constitutive equation in the form $q + D \frac{d}{d x} (\phi) = 0$. Somehow, and I'm not sure where in the code this is, but $q$ gets set to the velocity u, and the flux term $\phi$, gets set to $p$. You then give D to be $\frac{k}{\mu_c}$. This encodes our Darcy flow equation in uw3.
+\newline
+Now, I am trying to understand how you specify the advection diffusion equation. You give the advection diffusion solver the material, velocity and something called u\_Star\_fn, which I think is some sort of history variable for the material. You then give it a diffusion equation constituative model. This is again of the form 
+\begin{equation}
+	q = D \frac{d \phi}{d x},
+\end{equation}
+where $\phi$ is some flux term. How is $\phi$ specified, where can I find this in the code, and how should $D$ be defined? 
+
+
+\end{document}
