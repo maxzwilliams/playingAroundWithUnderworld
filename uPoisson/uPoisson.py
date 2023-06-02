@@ -290,7 +290,7 @@ if MPI.COMM_WORLD.size == 1:
     import numpy as np
     import pyvista as pv
 
-    pv.global_theme.background = "white"
+    pv.global_theme.background = "black"
     pv.global_theme.window_size = [500, 500]
     pv.global_theme.antialiasing = True
     pv.global_theme.jupyter_backend = "panel"
@@ -323,5 +323,7 @@ if MPI.COMM_WORLD.size == 1:
 # If we look at the analytic solution (analytic.png) and the numerical solution (numerical.png) they are quite different at the top and bottom boundaries. This is clear when looking at the difference between the numerical and analytic solutions (difference.png). Through a little bit of testing, this difference doesnt seem to be a function of mesh refinement, mesh degree or meshVariable degree.
 
 poisson_solver
+
+# $\nabla \cdot( \phi \nabla \phi) = S(\vec{x})$
 
 
